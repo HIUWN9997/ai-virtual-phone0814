@@ -2978,7 +2978,7 @@ export function ChatRoom({ session, onBack, onDeleted }: ChatRoomProps) {
             dispatchVisibleNotice(msg);
             const body = getNoticeBody(msg);
             if (body) {
-                sendBrowserNotification(charN, { body: body.slice(0, 60), icon: character?.avatar || undefined });
+                sendBrowserNotification(charN, { body: "你收到了一条消息", icon: character?.avatar || undefined });
             }
             const afterPublishResult = entry.afterPublish?.(msg);
             if (afterPublishResult) imageReplacementTasks.push(Promise.resolve(afterPublishResult));
