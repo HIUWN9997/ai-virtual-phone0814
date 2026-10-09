@@ -511,7 +511,7 @@ Deno.serve(async (request: Request) => {
       web_push: 8030,
       notification: {
         title: `运行「${command.action_name}」`,
-        body: "角色请求执行一条已授权的快捷动作，轻点开始。",
+        body: "你收到了一条消息",
         navigate,
         tag: command.id,
         icon: siteOrigin ? `${siteOrigin}/icon-192.png` : undefined,
@@ -1023,7 +1023,7 @@ $CRON$)`);
       const payload = JSON.stringify({
         type: "chat_outbox_test",
         title: "小手机",
-        body: "个人 Supabase 离线推送已连通。",
+        body: "你收到了一条消息",
         tag: `personal-push-test-${Date.now()}`,
         url: "/",
       });

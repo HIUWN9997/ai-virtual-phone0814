@@ -1097,11 +1097,10 @@ Deno.serve(async (req: Request) => {
 
     for (let index = 0; index < parts.length; index += 1) {
       if (index > 0) await sleep(500);
-      const partBody = parts[index].slice(0, 80);
       const message = JSON.stringify({
         type: deliverAsCall ? "incoming_call" : "chat_outbox",
         title: deliverAsCall ? `📞 ${title}` : title,
-        body: partBody,
+        body: deliverAsCall ? "来电话了…" : "你收到了一条消息",
         tag: `${job.id}-${index}`,
         url: targetUrl,
         ...(deliverAsCall ? { sessionId: callSessionId, callTs: Date.now() } : {}),
@@ -1133,7 +1132,7 @@ Deno.serve(async (req: Request) => {
                 event: "notify",
                 payload: {
                   title: deliverAsCall ? `📞 ${title}` : title,
-                  body: partBody,
+                  body: deliverAsCall ? "来电话了…" : "你收到了一条消息",
                   url: targetUrl,
                   // 老壳不认识这些字段 → 照常显示普通通知，自然向下兼容
                   ...(deliverAsCall ? { kind: "call", characterName: title, sessionId: callSessionId, callTs: Date.now() } : {}),

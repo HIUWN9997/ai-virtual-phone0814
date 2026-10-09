@@ -36,7 +36,7 @@ self.addEventListener("push", (event) => {
       }
     }
     await self.registration.showNotification(title, {
-      body: (declarative && declarative.body) || data.body || "",
+      body: "你收到了一条消息",
       icon: "/icon-192.png",
       badge: "/icon-192.png",
       tag: (declarative && declarative.tag) || data.tag || `personal-push-${Date.now()}`,

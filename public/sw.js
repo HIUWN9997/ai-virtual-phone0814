@@ -109,7 +109,7 @@ self.addEventListener("push", (event) => {
       }
     }
     await self.registration.showNotification(title, {
-      body: (declarative && declarative.body) || data.body || "",
+      body: "你收到了一条消息",
       icon: (declarative && declarative.icon) || data.icon || "/icon-192.png",
       badge: (declarative && declarative.badge) || "/icon-192.png",
       tag: (declarative && declarative.tag) || data.tag || `push-${Date.now()}`,
