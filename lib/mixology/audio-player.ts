@@ -3,7 +3,7 @@
 //
 // 机括的界面跑在沙盒 iframe 里，对白按钮却是宿主画的：玩家的那一下点击落在宿主文档上，
 // iframe 拿不到这次手势，iOS Safari 会拦掉它随后的 audio.play()。所以播放由宿主来做——
-// 点击时先在手势里把宿主的 <audio> 解锁（prime），机括合成完把音频递上来（mix.play），
+// 点击时先在手势里把宿主的  解锁（prime），机括合成完把音频递上来（mix.play），
 // 宿主用这只已解锁的元素放。同一时刻只放一段，再放会先停上一段。
 
 type PlayHooks = { onStart?: () => void; onEnd?: () => void; onError?: (message: string) => void };
@@ -13,6 +13,7 @@ let unlocked = false;
 let currentUrl = "";
 let currentHooks: PlayHooks | null = null;
 
+// ✅改动：不再加载模块就new Audio，调用时才实例化
 function element(): HTMLAudioElement {
     if (!shared) {
         shared = new Audio();
@@ -66,6 +67,23 @@ export function stopMixAudio(): void {
     audio.onended = null;
     audio.onerror = null;
     finish("end");
+}
+
+// ✅【新增】页面切后台销毁音频，清理iOS媒体会话，消除锁屏float播放器
+export function destroyMixAudioInstance() {
+    stopMixAudio();
+    if (shared) {
+        try {
+            shared.pause();
+            shared.src = "";
+        } catch { /* ignore */ }
+        shared = null;
+    }
+    unlocked = false;
+    if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = null;
+        navigator.mediaSession.playbackState = "none";
+    }
 }
 
 /** 放一段音频（Blob）。会先停掉上一段；onStart 在真正开始出声时回调 */
